@@ -70,3 +70,14 @@ test('every catalog page belongs to an accessible subtopic destination', async (
   assert.ok(html.includes('id="subtopic-menu" popover="auto"'));
   assert.ok(html.includes('data-subtopic-count'));
 });
+
+test('canonical and sharing metadata, robots, and sitemap use the custom domain', async () => {
+  const siteUrl = 'https://petalume.art.br/';
+  const html = await readFile('_site/index.html', 'utf8');
+  assert.ok(html.includes(`<link rel="canonical" href="${siteUrl}">`));
+  assert.ok(html.includes(`<meta property="og:url" content="${siteUrl}">`));
+  assert.ok(html.includes(`<meta property="og:image" content="${siteUrl}assets/pages/page-01-810.webp">`));
+  assert.ok(!html.includes('https://luantafarel.github.io/petalume/'));
+  assert.ok((await readFile('_site/robots.txt', 'utf8')).includes(`Sitemap: ${siteUrl}sitemap.xml`));
+  assert.ok((await readFile('_site/sitemap.xml', 'utf8')).includes(`<loc>${siteUrl}</loc>`));
+});

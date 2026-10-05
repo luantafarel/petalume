@@ -2,7 +2,7 @@ import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import sharp from 'sharp';
 
 const pages = JSON.parse(await readFile('assets/catalog.json', 'utf8'));
-const siteUrl = 'https://luantafarel.github.io/petalume/';
+const siteUrl = 'https://petalume.art.br/';
 const escapeHtml = (value) => value.replace(/[&<>"']/g, (character) => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 })[character]);

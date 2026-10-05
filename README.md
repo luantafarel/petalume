@@ -1,6 +1,6 @@
 # Petalume
 
-The Petalume catalog, published at https://luantafarel.github.io/petalume/.
+The Petalume catalog, configured for https://petalume.art.br/.
 
 This static site pairs a responsive, brand-led opening with the September 2026
 catalog. The opening uses the original Petalume logo and product photographs,
@@ -69,3 +69,38 @@ If page ordering or count changes, update the headings, chapters, and tests.
 In the repository settings, select **GitHub Actions** as the Pages source.
 The workflow is `.github/workflows/pages.yml` and publishes only `_site/`, not
 the source PDF, intermediate JPEGs, build tools, or development dependencies.
+
+## Custom Domain
+
+The build uses `https://petalume.art.br/` for canonical URLs, sharing metadata,
+robots, and the sitemap. This does not configure GitHub or DNS automatically.
+
+1. Recommended: verify `petalume.art.br` under your GitHub account's Settings >
+	Pages, adding the TXT record GitHub supplies at Registro.br.
+2. In `luantafarel/petalume`, open Settings > Pages, enter `petalume.art.br`
+	under Custom domain, and save it before pointing DNS to GitHub.
+3. In Registro.br's DNS zone editor, add the following records. For apex
+	records, leave the name empty if the editor appends `.petalume.art.br`.
+
+| Type | Name | Value |
+| --- | --- | --- |
+| A | apex / @ | 185.199.108.153 |
+| A | apex / @ | 185.199.109.153 |
+| A | apex / @ | 185.199.110.153 |
+| A | apex / @ | 185.199.111.153 |
+| CNAME | www | luantafarel.github.io |
+
+Replace conflicting website A/AAAA or www records, not unrelated MX/TXT email
+records. Do not use a wildcard or include `/petalume` in the CNAME value.
+If IPv6 is needed, add the four GitHub Pages AAAA records documented by GitHub.
+
+4. Commit and push the website changes to `main`. The workflow rebuilds and
+	deploys the updated metadata automatically.
+5. After DNS and certificate provisioning finish, enable Enforce HTTPS in
+	Settings > Pages. DNS propagation and HTTPS availability may take 24 hours.
+
+This project deploys through GitHub Actions: a `CNAME` file in the repository
+or build artifact is not required and does not replace the Pages setting.
+GitHub handles the redirect from www to the apex when both are configured.
+
+Reference: https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site
