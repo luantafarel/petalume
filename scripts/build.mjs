@@ -22,15 +22,27 @@ const headings = [
 
 const icon = (name) => `<img class="icon" src="assets/icons/${name}.svg" width="20" height="20" alt="" aria-hidden="true">`;
 const chapters = [
-  { id: 'inicio', label: 'Início' },
-  { id: 'pagina-2', label: 'Sobre' },
-  { id: 'pagina-4', label: 'Processo' },
-  { id: 'pagina-5', label: 'Peças' },
-  { id: 'pagina-17', label: 'Joias' },
-  { id: 'pagina-23', label: 'Pagamento' },
-  { id: 'pagina-24', label: 'Cuidados' },
-  { id: 'pagina-32', label: 'Contato' },
+  { id: 'inicio', label: 'Início', pages: [1] },
+  { id: 'pagina-2', label: 'Sobre', pages: [2, 3] },
+  { id: 'pagina-4', label: 'Processo', pages: [4] },
+  { id: 'pagina-5', label: 'Peças', pages: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] },
+  { id: 'pagina-17', label: 'Joias', pages: [17, 18, 19, 20, 21, 22] },
+  { id: 'pagina-23', label: 'Pagamento', pages: [23] },
+  { id: 'pagina-24', label: 'Cuidados', pages: [24, 25, 26, 27, 28, 29, 30, 31] },
+  { id: 'pagina-32', label: 'Contato', pages: [32] },
 ];
+
+const subtopicLabel = (number) => number === 1 ? 'Apresentação' : number === 5 ? 'Modelos e variações' : headings[number - 1];
+const subtopicMenu = `
+  <div class="subtopic-menu" id="subtopic-menu" popover="auto" aria-labelledby="subtopic-title">
+    <div class="subtopic-header"><h2 id="subtopic-title">Explorar catálogo</h2><button class="menu-close" type="button" popovertarget="subtopic-menu" popovertargetaction="hide" aria-label="Fechar subtópicos" title="Fechar">${icon('x')}</button></div>
+${chapters.map((chapter, index) => `    <section class="subtopic-group" data-subtopic-group="${index}" aria-labelledby="grupo-${index}">
+      <h3 id="grupo-${index}">${chapter.label}</h3>
+      <div class="subtopic-options">
+${chapter.pages.map((number, position) => `        <a href="#${number === 1 ? 'inicio' : `pagina-${number}`}" data-subtopic-link data-chapter="${index}" data-label="${escapeHtml(subtopicLabel(number))}"><span class="subtopic-number">${String(position + 1).padStart(2, '0')}</span><span>${escapeHtml(subtopicLabel(number))}</span>${icon('arrow-up-right')}</a>`).join('\n')}
+      </div>
+    </section>`).join('\n')}
+  </div>`;
 
 const contactLinks = `
       <div class="contact-content">
@@ -71,7 +83,11 @@ const landing = `
 const navigation = `
   <nav class="section-map" aria-label="Mapa do catálogo">
     <div class="map-inner">
-      <div class="map-caption"><span>Petalume <span class="caption-divider">/</span> <span data-section-name>Início</span></span><span class="section-count"><span data-section-count>01</span> / 08</span></div>
+      <div class="map-caption">
+        <span class="map-breadcrumb"><span class="map-brand">Petalume <span class="caption-divider">/</span></span><span data-section-name>Início</span></span>
+        <button class="subtopic-trigger" type="button" popovertarget="subtopic-menu" aria-label="Escolher subtópico" title="Escolher subtópico"><span data-subtopic-name>Apresentação</span><span class="subtopic-position" data-subtopic-count>1 / 1</span>${icon('chevron-down')}</button>
+        <span class="section-count"><span data-section-count>01</span> / 08</span>
+      </div>
       <div class="map-controls">
         <a class="map-arrow" href="#inicio" data-section-previous aria-label="Seção anterior" title="Seção anterior" aria-disabled="true">${icon('chevron-left')}</a>
         <div class="map-links">
@@ -132,6 +148,7 @@ ${landing}
 ${sections}
   </main>
 ${navigation}
+${subtopicMenu}
 </body>
 </html>
 `;
@@ -143,7 +160,7 @@ await cp('styles.css', '_site/styles.css');
 await cp('navigation.js', '_site/navigation.js');
 await cp('assets/favicon.png', '_site/assets/favicon.png');
 await mkdir('_site/assets/icons', { recursive: true });
-for (const name of ['arrow-right', 'arrow-up-right', 'arrow-down', 'chevron-left', 'chevron-right', 'chevron-down', 'message-circle', 'mail', 'camera', 'book-open']) {
+for (const name of ['arrow-right', 'arrow-up-right', 'arrow-down', 'chevron-left', 'chevron-right', 'chevron-down', 'message-circle', 'mail', 'camera', 'book-open', 'x']) {
   await cp(`node_modules/lucide-static/icons/${name}.svg`, `_site/assets/icons/${name}.svg`);
 }
 const logo = await sharp('assets/pages/page-01-1620.webp')

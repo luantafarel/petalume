@@ -56,3 +56,17 @@ test('the landing and section map expose working destinations without JavaScript
   assert.ok((await stat('_site/assets/brand-logo.webp')).size > 0);
   assert.ok((await sharp('_site/assets/brand-logo.webp').metadata()).hasAlpha);
 });
+
+test('every catalog page belongs to an accessible subtopic destination', async () => {
+  const html = await readFile('_site/index.html', 'utf8');
+  const subtopics = [...html.matchAll(/href="#([^"]+)" data-subtopic-link data-chapter="(\d+)"/g)];
+  assert.equal(subtopics.length, 32);
+  assert.equal(new Set(subtopics.map((match) => match[1])).size, 32);
+  for (const [match, destination] of subtopics) {
+    assert.ok(html.includes(`id="${destination}"`), match);
+  }
+  assert.deepEqual(Array.from({ length: 8 }, (_, chapter) => subtopics.filter((match) => Number(match[2]) === chapter).length), [1, 2, 1, 12, 6, 1, 8, 1]);
+  assert.ok(html.includes('popovertarget="subtopic-menu"'));
+  assert.ok(html.includes('id="subtopic-menu" popover="auto"'));
+  assert.ok(html.includes('data-subtopic-count'));
+});

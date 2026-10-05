@@ -8,6 +8,13 @@ with a fixed bottom map for eight sections: Inicio, Sobre, Processo, Pecas, Joia
 Pagamento, Cuidados, and Contato. Previous/next arrows behave like chapter
 pagination; the active chapter follows scrolling and stays visible on mobile.
 
+The current subtopic and its position appear above the chapter shortcuts. Its
+native popover lists the pages in the active chapter, including every product
+model, jewelry collection, and care guide. Selecting an item jumps to its page
+and closes the menu. All 32 destinations are available without JavaScript too.
+The fixed map's measured height is reserved in both the opening and scroll
+padding, keeping image captions, the closing line, and reading controls visible.
+
 The catalog artwork is preserved as responsive WebP images. Each interior page
 also offers a native "Ler texto" disclosure for reading copy and prices at a
 comfortable text size. Contact details are rendered as responsive HTML with
