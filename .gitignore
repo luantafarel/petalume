@@ -1,0 +1,7 @@
+*.pdf
+assets/pages/*.jpg
+_site/
+node_modules/
+.DS_Store
+test-results/
+playwright-report/

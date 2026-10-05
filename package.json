@@ -1,0 +1,17 @@
+{
+  "name": "petalume",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "assets": "swift scripts/export.swift && node scripts/optimize.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/site.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
+  }
+}
