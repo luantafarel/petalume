@@ -12,6 +12,7 @@
     "node": ">=22"
   },
   "devDependencies": {
+    "lucide-static": "^1.52.0",
     "sharp": "^0.35.5"
   }
 }

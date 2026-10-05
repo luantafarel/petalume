@@ -23,15 +23,36 @@ test('the published artifact is static, complete, and excludes the original PDF'
   const html = await readFile('_site/index.html', 'utf8');
   assert.equal((html.match(/class="catalog-page"/g) ?? []).length, 32);
   assert.equal((html.match(/class="accessible-text"/g) ?? []).length, 32);
-  assert.equal((html.match(/loading="lazy"/g) ?? []).length, 31);
+  const catalogSections = html.match(/<section class="catalog-page"[\s\S]*?<\/section>/g) ?? [];
+  assert.equal(catalogSections.filter((section) => section.includes('loading="lazy"')).length, 32);
   assert.ok(html.includes('lang="pt-BR"'));
   assert.ok(html.includes('fetchpriority="high"'));
   assert.ok(html.includes('https://wa.me/5531983693238'));
   assert.ok(html.includes('mailto:petalumeatelier@gmail.com'));
   assert.ok(html.includes('https://www.instagram.com/petalumeatelier/'));
-  assert.ok(!html.includes('<script'));
+  assert.ok(html.includes('<script src="navigation.js" defer></script>'));
   assert.equal((await readdir('_site/assets/pages')).length, 64);
   assert.ok((await stat('_site/styles.css')).size > 0);
   assert.ok((await stat('_site/assets/favicon.png')).size > 0);
   assert.ok(!(await readdir('_site')).some((filename) => filename.endsWith('.pdf')));
+});
+
+test('the landing and section map expose working destinations without JavaScript', async () => {
+  const html = await readFile('_site/index.html', 'utf8');
+  assert.ok(html.includes('class="landing" id="inicio"'));
+  assert.ok(html.includes('class="brand-logo"'));
+  assert.ok(html.includes('aria-label="Mapa do catálogo"'));
+  const destinations = ['inicio', 'pagina-2', 'pagina-4', 'pagina-5', 'pagina-17', 'pagina-23', 'pagina-24', 'pagina-32'];
+  for (const destination of destinations) {
+    assert.ok(html.includes(`id="${destination}"`));
+    assert.ok(html.includes(`href="#${destination}" data-section-link`));
+  }
+  assert.ok(html.includes('data-section-previous'));
+  assert.ok(html.includes('data-section-next'));
+  assert.ok(html.includes('aria-current="location"'));
+  assert.equal((html.match(/<h1\b/g) ?? []).length, 1);
+  assert.equal((html.match(/class="page-reading"/g) ?? []).length, 30);
+  assert.ok((await stat('_site/navigation.js')).size > 0);
+  assert.ok((await stat('_site/assets/brand-logo.webp')).size > 0);
+  assert.ok((await sharp('_site/assets/brand-logo.webp').metadata()).hasAlpha);
 });

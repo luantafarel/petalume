@@ -2,11 +2,21 @@
 
 The Petalume catalog, published at https://luantafarel.github.io/petalume/.
 
-This static site preserves all 32 pages of the September 2026 PDF as responsive
-WebP artwork. Page layouts, photographs, typography, and backgrounds come directly
-from the supplied catalog rather than approximations in HTML. Extracted text is
-included for screen readers and search engines. The contact page includes working
-WhatsApp, email, and Instagram links. There is no client-side JavaScript.
+This static site pairs a responsive, brand-led opening with the September 2026
+catalog. The opening uses the original Petalume logo and product photographs,
+with a fixed bottom map for eight sections: Inicio, Sobre, Processo, Pecas, Joias,
+Pagamento, Cuidados, and Contato. Previous/next arrows behave like chapter
+pagination; the active chapter follows scrolling and stays visible on mobile.
+
+The catalog artwork is preserved as responsive WebP images. Each interior page
+also offers a native "Ler texto" disclosure for reading copy and prices at a
+comfortable text size. Contact details are rendered as responsive HTML with
+working WhatsApp, email, and Instagram links. Printing retains all 32 original
+pages and hides the website-specific opening and navigation.
+
+A small local `navigation.js` enhances the section map. Anchor links and text
+disclosures still work without JavaScript. Lucide icons are bundled locally;
+Google Fonts are optional and have serif/sans-serif fallbacks.
 
 ## Build and Preview
 
@@ -19,8 +29,10 @@ npm test
 open _site/index.html
 ```
 
-The site needs no development server. `_site/` contains the complete deployable
+The site needs no application server. `_site/` contains the complete deployable
 site, including relative asset paths that work under a GitHub Pages project URL.
+For browser testing, serve this folder with a lightweight local HTTP server.
+Normal builds use only existing WebP files; they do not reprocess the large PDF.
 
 ## Update the Catalog
 
@@ -39,10 +51,11 @@ Commit the updated WebP files and `assets/catalog.json`, then push to `main`.
 GitHub Actions builds, tests, and deploys the site automatically. Normal builds
 do not need the PDF, Swift, or macOS.
 
-Text in the visible catalog is baked into the artwork to preserve the exact
-design. To change its copy, prices, or layout, edit the source PDF and regenerate
-the assets. If page ordering, page count, or contact placement changes, update
-the headings in `scripts/build.mjs`, contact regions in `styles.css`, and tests.
+Text in the catalog artwork is baked into its images. To change prices or page
+layouts, edit the source PDF and regenerate the assets. The readable text comes
+from `assets/catalog.json`. Website copy, chapter destinations, logo/photo crops,
+and contact links live in `scripts/build.mjs`; presentation is in `styles.css`.
+If page ordering or count changes, update the headings, chapters, and tests.
 
 ## GitHub Pages
 

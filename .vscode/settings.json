@@ -1,0 +1,21 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^gh repo view luantafarel/petalume --json name,url,visibility$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^git status --short --branch; git remote -v; gh repo view luantafarel/petalume --json name,url,visibility,defaultBranchRef 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^gh repo view luantafarel/petalume --json name,url,visibility,defaultBranchRef$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^git remote -v$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "gh": true
+    }
+}
