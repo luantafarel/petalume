@@ -96,4 +96,3 @@ test('canonical and sharing metadata, robots, and sitemap use the custom domain'
     assert.ok(sitemap.includes(`<loc>${siteUrl}${slug}.html</loc>`));
   }
 });
-{}
