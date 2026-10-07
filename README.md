@@ -2,28 +2,27 @@
 
 The Petalume catalog, configured for https://petalume.art.br/.
 
-This static site pairs a responsive, brand-led opening with the September 2026
-catalog. The opening uses the original Petalume logo and product photographs,
-with a fixed bottom map for eight sections: Inicio, Sobre, Processo, Pecas, Joias,
-Pagamento, Cuidados, and Contato. Previous/next arrows behave like chapter
-pagination; the active chapter follows scrolling and stays visible on mobile.
+This static site pairs a responsive, brand-led landing page with seven separate
+catalog section pages: Sobre, Processo, Peças, Joias, Pagamento, Cuidados, and
+Contato. The landing preserves the Petalume logo and product photographs and
+includes a directory linking to every section.
 
-The current subtopic and its position appear above the chapter shortcuts. Its
-native popover lists the pages in the active chapter, including every product
-model, jewelry collection, and care guide. Selecting an item jumps to its page
-and closes the menu. All 32 destinations are available without JavaScript too.
-The fixed map's measured height is reserved in both the opening and scroll
-padding, keeping image captions, the closing line, and reading controls visible.
+A hamburger at the upper left opens a side menu with all sections and their
+32 catalog-page destinations. Links within a section scroll to that page;
+choosing another section opens its own HTML page. The menu is hidden until
+opened, and no persistent bottom navigation covers the catalog.
 
-The catalog artwork is preserved as responsive WebP images. Each interior page
-also offers a native "Ler texto" disclosure for reading copy and prices at a
-comfortable text size. Contact details are rendered as responsive HTML with
-working WhatsApp, email, and Instagram links. Printing retains all 32 original
-pages and hides the website-specific opening and navigation.
+The catalog artwork is preserved as responsive WebP images. Extracted page text
+is retained for assistive technologies without adding a visible transcript
+control. Contact details are rendered as responsive HTML with working WhatsApp,
+email, and Instagram links. Printing retains all 32 original pages and hides the
+website-specific opening and navigation.
 
-A small local `navigation.js` enhances the section map. Anchor links and text
-disclosures still work without JavaScript. Lucide icons are bundled locally;
-Google Fonts are optional and have serif/sans-serif fallbacks.
+A small local `navigation.js` closes the drawer after a destination is selected.
+Section links and text alternatives for assistive technologies remain available
+without JavaScript.
+Lucide icons are bundled locally; Google Fonts are optional and have
+serif/sans-serif fallbacks.
 
 ## Build and Preview
 
