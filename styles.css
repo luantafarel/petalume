@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'Garet';
+  src: url('assets/fonts/Garet-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Respondent';
+  src: url('assets/fonts/Respondent-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   color-scheme: light;
   /* Fundo amarelinho bebê indicado por Amanda */
@@ -103,7 +119,7 @@ button:focus-visible {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   color: var(--ink);
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Garet', 'Montserrat', sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -141,12 +157,12 @@ button:focus-visible {
 
 .cursive-tagline {
   margin: 0;
-  font-family: 'Alex Brush', cursive, Georgia, serif;
-  font-size: clamp(30px, 6vw, 38px);
+  font-family: 'Respondent', cursive, serif;
+  font-size: clamp(22px, 5.8vw, 36px);
   line-height: 1.25;
   color: #3b3a36;
   text-align: center;
-  text-wrap: balance;
+  white-space: nowrap;
 }
 
 /* 3. Grid principal (no celular empilha, no PC 2 colunas) */
@@ -156,38 +172,40 @@ button:focus-visible {
   width: 100%;
 }
 
-/* 4. Fotos ANTES e DEPOIS */
+/* 4. Fotos ANTES e DEPOIS - perfeitamente centralizadas e sem cortes */
 .before-after-section {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
   width: 100%;
-  margin: 0 0 32px;
+  max-width: 420px;
+  margin: 0 auto 24px;
+  align-items: center;
 }
 
 .ba-col {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .ba-label {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Garet', 'Montserrat', sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--label-color);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   text-transform: uppercase;
 }
 
 .ba-img-card {
   width: 100%;
-  aspect-ratio: 3 / 4;
-  border-radius: 14px;
+  aspect-ratio: 500 / 750;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(59, 58, 54, 0.08);
-  background: #f4eee0;
+  box-shadow: 0 4px 14px rgba(59, 58, 54, 0.08);
 }
 
 .ba-img-card img {
@@ -229,7 +247,7 @@ button:focus-visible {
 }
 
 .idx-num {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Garet', 'Montserrat', sans-serif;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -238,10 +256,10 @@ button:focus-visible {
 }
 
 .idx-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Garet', 'Montserrat', sans-serif;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: var(--ink);
   text-transform: uppercase;
 }
@@ -304,94 +322,116 @@ button:focus-visible {
 }
 
 /* ========================================================
-   VERSÃO PC / DESKTOP (Adaptando o formato com os mesmos atributos)
+   VERSÃO PC / DESKTOP (Sem necessidade de scroll: cabe 100% na tela)
    ======================================================== */
 @media (min-width: 900px) {
+  body.home-page {
+    overflow: hidden;
+  }
+
   .amanda-page-wrapper {
-    max-width: 1160px;
-    padding: 28px 48px 64px;
+    max-width: 1140px;
+    height: 100vh;
+    height: 100svh;
+    max-height: 100svh;
+    padding: 12px 36px 16px;
+    justify-content: space-between;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   .home-top-bar {
-    margin-bottom: 16px;
+    margin-bottom: 0;
   }
 
   .brand-section {
-    margin-bottom: 36px;
+    margin-bottom: 6px;
   }
 
   .brand-logo {
-    width: 260px;
-    margin-bottom: 16px;
+    width: clamp(140px, 14vw, 185px);
+    margin: 0 auto 6px;
   }
 
   .cursive-tagline {
-    font-size: 44px;
+    font-size: clamp(28px, 2.5vw, 36px);
   }
 
   /* 2 colunas equilibradas no PC: Fotos à esquerda, Índice à direita */
   .desktop-main-grid {
     display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 60px;
-    align-items: start;
-    margin-bottom: 24px;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+    align-items: center;
+    margin-bottom: 6px;
+    width: 100%;
+    max-width: 1020px;
+    margin-inline: auto;
   }
 
   .before-after-section {
-    gap: 20px;
+    gap: 16px;
     margin: 0;
+    width: 100%;
+  }
+
+  .ba-col {
+    width: 100%;
   }
 
   .ba-label {
-    font-size: 12px;
-    margin-bottom: 10px;
+    font-size: 11px;
+    margin-bottom: 6px;
   }
 
   .ba-img-card {
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(59, 58, 54, 0.08);
+    border-radius: 12px;
+    aspect-ratio: 3 / 4;
+    max-height: 38vh;
+    box-shadow: 0 6px 20px rgba(59, 58, 54, 0.08);
   }
 
   .amanda-index-nav {
     margin: 0;
+    width: 100%;
   }
 
   .amanda-index-list li a {
-    padding: 17px 8px;
-    gap: 20px;
+    padding: 10px 4px;
+    gap: 16px;
   }
 
   .idx-num {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .idx-title {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   /* Rodapé no PC: Contatos em linha horizontal limpa */
   .amanda-footer-contact {
-    margin-top: 48px;
-    padding-top: 36px;
+    margin-top: 4px;
+    padding-top: 12px;
     border-top: 1px solid var(--line);
     width: 100%;
   }
 
   .amanda-footer-contact h3 {
-    font-size: 26px;
-    margin-bottom: 24px;
+    font-size: clamp(17px, 1.6vw, 21px);
+    margin-bottom: 8px;
   }
 
   .footer-contact-list {
     flex-direction: row;
     justify-content: center;
-    gap: 40px;
+    gap: 36px;
     width: 100%;
   }
 
   .footer-contact-list li a {
-    font-size: 14px;
+    font-size: 13px;
+    gap: 10px;
   }
 }
 
@@ -437,7 +477,7 @@ button:focus-visible {
 
 .chapter-heading h1 {
   margin: 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Garet', 'Montserrat', sans-serif;
   font-size: clamp(24px, 4vw, 32px);
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -483,13 +523,23 @@ button:focus-visible {
 }
 
 .accessible-text {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.accessible-text * {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: inline !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
 }
 
 #pagina-32 {
@@ -627,14 +677,14 @@ button:focus-visible {
 }
 
 .drawer-num {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Garet', 'Montserrat', sans-serif;
   font-size: 12px;
   font-weight: 700;
   color: var(--ink);
 }
 
 .drawer-text {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Garet', 'Montserrat', sans-serif;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.08em;

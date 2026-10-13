@@ -144,7 +144,7 @@ ${page.number === 32 ? contactLinks : ''}
     </section>`;
 };
 
-const renderDocument = ({ title, canonical, content, description }) => `<!doctype html>
+const renderDocument = ({ title, canonical, content, description, bodyClass = '' }) => `<!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
@@ -156,7 +156,7 @@ const renderDocument = ({ title, canonical, content, description }) => `<!doctyp
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Livvic:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="navigation.js" defer></script>
   <meta property="og:locale" content="pt_BR">
@@ -167,7 +167,7 @@ const renderDocument = ({ title, canonical, content, description }) => `<!doctyp
   <meta property="og:url" content="${canonical}">
   <meta property="og:image" content="${siteUrl}assets/pages/page-01-810.webp">
 </head>
-<body>
+<body class="${bodyClass}">
   <a class="skip-link" href="#conteudo-principal">Ir para o conteúdo</a>
   <div id="conteudo-principal">
 ${content}
@@ -205,6 +205,7 @@ ${sec.pages.map((number) => renderCatalogPage(pages[number - 1], firstPageNumber
     canonical: `${siteUrl}${sec.slug}.html`,
     description: `${sec.title} — Catálogo artesanal Petalume.`,
     content: chapterContent,
+    bodyClass: 'section-page',
   });
 
   return {
@@ -220,10 +221,12 @@ const home = renderDocument({
   canonical: siteUrl,
   description: 'Suas memórias, em forma de arte. Flores e lembranças eternizadas em peças artesanais e joias afetivas.',
   content: homePageContent,
+  bodyClass: 'home-page',
 });
 
 await rm('_site', { recursive: true, force: true });
 await mkdir('_site/assets/pages', { recursive: true });
+await mkdir('_site/assets/fonts', { recursive: true });
 await writeFile('_site/index.html', home);
 
 // Salva páginas com os nomes dos botões e também com os nomes legados para compatibilidade
@@ -241,6 +244,8 @@ await cp('assets/paper.webp', '_site/assets/paper.webp');
 await cp('assets/brand-logo.webp', '_site/assets/brand-logo.webp');
 await cp('assets/antes-bouquet.webp', '_site/assets/antes-bouquet.webp');
 await cp('assets/depois-tray.webp', '_site/assets/depois-tray.webp');
+await cp('assets/fonts/Respondent-Medium.ttf', '_site/assets/fonts/Respondent-Medium.ttf');
+await cp('assets/fonts/Garet-Bold.ttf', '_site/assets/fonts/Garet-Bold.ttf');
 
 await mkdir('_site/assets/icons', { recursive: true });
 for (const name of ['arrow-right', 'arrow-up-right', 'arrow-left', 'message-circle', 'mail', 'camera', 'x', 'menu']) {
