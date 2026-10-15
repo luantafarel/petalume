@@ -3,9 +3,17 @@ import sharp from 'sharp';
 
 const pages = JSON.parse(await readFile('assets/catalog.json', 'utf8'));
 const siteUrl = 'https://petalume.art.br/';
+const analyticsToken = (process.env.CLOUDFLARE_WEB_ANALYTICS_TOKEN ?? '').trim();
+if (analyticsToken && !/^[a-f0-9]{32}$/i.test(analyticsToken)) {
+  throw new Error('CLOUDFLARE_WEB_ANALYTICS_TOKEN must be the 32-character public token from data-cf-beacon, not a Cloudflare API token.');
+}
 const escapeHtml = (value) => value.replace(/[&<>"']/g, (character) => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 })[character]);
+
+const analyticsScript = analyticsToken
+  ? `  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='${JSON.stringify({ token: analyticsToken })}'></script>`
+  : '';
 
 const icon = (name) => `<img class="icon" src="assets/icons/${name}.svg" width="20" height="20" alt="" aria-hidden="true">`;
 
@@ -173,6 +181,7 @@ const renderDocument = ({ title, canonical, content, description, bodyClass = ''
 ${content}
   </div>
 ${catalogMenu}
+${analyticsScript}
 </body>
 </html>
 `;

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFile, readdir, stat } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import sharp from 'sharp';
 
@@ -75,4 +76,43 @@ test('canonical and sharing metadata, robots, and sitemap use the custom domain'
   const sitemap = await readFile('_site/sitemap.xml', 'utf8');
   assert.ok(sitemap.includes(`<loc>${siteUrl}</loc>`));
   assert.equal((sitemap.match(/<loc>/g) ?? []).length, 8);
+});
+
+test('Cloudflare Analytics is optional and consistent across every generated page', async () => {
+  const filenames = (await readdir('_site')).filter((filename) => filename.endsWith('.html'));
+  const home = await readFile('_site/index.html', 'utf8');
+  const source = 'https://static.cloudflareinsights.com/beacon.min.js';
+  const enabled = home.includes(source);
+  const configuredToken = process.env.CLOUDFLARE_WEB_ANALYTICS_TOKEN?.trim();
+  if (configuredToken !== undefined) assert.equal(enabled, Boolean(configuredToken));
+  let expectedToken = configuredToken;
+  for (const filename of filenames) {
+    const html = await readFile(`_site/${filename}`, 'utf8');
+    const scripts = [...html.matchAll(/<script\b[^>]*src="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js"[^>]*><\/script>/g)];
+    assert.equal(scripts.length, enabled ? 1 : 0, filename);
+    assert.ok(!html.includes('CLOUDFLARE_WEB_ANALYTICS_TOKEN'), filename);
+    if (enabled) {
+      const script = scripts[0][0];
+      assert.ok(script.includes(' defer '), filename);
+      const attribute = script.match(/data-cf-beacon='([^']+)'/);
+      assert.ok(attribute, filename);
+      const configuration = JSON.parse(attribute[1]);
+      assert.match(configuration.token, /^[a-f0-9]{32}$/i, filename);
+      expectedToken ??= configuration.token;
+      assert.equal(configuration.token, expectedToken, filename);
+      assert.ok(html.indexOf(script) < html.indexOf('</body>'), filename);
+    } else {
+      assert.ok(!html.includes('data-cf-beacon'), filename);
+    }
+  }
+});
+
+test('Cloudflare Analytics rejects invalid identifiers before publishing', () => {
+  const result = spawnSync(process.execPath, ['scripts/build.mjs'], {
+    encoding: 'utf8',
+    timeout: 10000,
+    env: { ...process.env, CLOUDFLARE_WEB_ANALYTICS_TOKEN: 'not-a-public-site-token' },
+  });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /must be the 32-character public token/);
 });

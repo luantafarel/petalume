@@ -69,6 +69,38 @@ In the repository settings, select **GitHub Actions** as the Pages source.
 The workflow is `.github/workflows/pages.yml` and publishes only `_site/`, not
 the source PDF, intermediate JPEGs, build tools, or development dependencies.
 
+## Cloudflare Web Analytics
+
+Analytics is optional and does not change the design, GitHub Pages hosting, or
+Registro.br DNS. An unconfigured build adds no Cloudflare tracking script.
+
+1. Open https://dash.cloudflare.com/?to=/:account/web-analytics and select
+	**Add a site**. Enter `petalume.art.br` as the hostname.
+2. Under **Manage site**, copy the JavaScript snippet for manual installation.
+	Find the 32-character public `token` inside `data-cf-beacon`. This is a
+	browser-visible site identifier, not a Cloudflare API token or password.
+3. In the GitHub repository, open **Settings > Secrets and variables > Actions >
+	Variables > New repository variable**. Set the name to
+	`CLOUDFLARE_WEB_ANALYTICS_TOKEN` and the value to that public identifier only.
+4. After the integration changes reach `main`, run **Deploy Petalume to GitHub
+	Pages** using **Actions > Run workflow**. Changing a repository variable alone
+	does not deploy the site. No manual HTML snippet or duplicate injection is needed.
+5. Open the published site, navigate between sections, and check Cloudflare Web
+	Analytics after a few minutes. Browser blockers can prevent measurements.
+
+The build injects one deferred Cloudflare beacon before `</body>` on the home
+page, every section page, and legacy URL aliases. Ordinary local builds omit it.
+For a controlled local check, set `CLOUDFLARE_WEB_ANALYTICS_TOKEN` when building;
+using a real identifier in a local preview can send test visits to the dashboard.
+Remove the repository variable and redeploy to disable collection.
+
+The dashboard provides aggregate traffic and performance data, not an exact
+count of identifiable people. It does not recover visits from before installation.
+Cloudflare's cookie-free approach does not remove the need to review applicable
+privacy disclosures for the site.
+
+Setup reference: https://developers.cloudflare.com/web-analytics/get-started/
+
 ## Custom Domain
 
 The build uses `https://petalume.art.br/` for canonical URLs, sharing metadata,
