@@ -91,13 +91,13 @@ const homePageContent = `
         <div class="ba-col">
           <span class="ba-label">ANTES</span>
           <div class="ba-img-card">
-            <img src="assets/antes-bouquet.webp" width="600" height="750" alt="Antes: Buquê de flores naturais" loading="eager">
+            <img src="assets/antes-bouquet.webp" width="500" height="750" alt="Antes: Buquê de flores naturais" loading="eager" fetchpriority="high" decoding="async">
           </div>
         </div>
         <div class="ba-col">
           <span class="ba-label">DEPOIS</span>
           <div class="ba-img-card">
-            <img src="assets/depois-tray.webp" width="600" height="750" alt="Depois: Bandeja de resina com flores eternizadas" loading="eager">
+            <img src="assets/depois-tray.webp" width="500" height="750" alt="Depois: Bandeja de resina com flores eternizadas" loading="eager" fetchpriority="high" decoding="async">
           </div>
         </div>
       </section>
@@ -162,9 +162,7 @@ const renderDocument = ({ title, canonical, content, description, bodyClass = ''
   <meta name="description" content="${description}">
   <link rel="canonical" href="${canonical}">
   <link rel="icon" type="image/png" href="assets/favicon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/livvic-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
   <script src="navigation.js" defer></script>
   <meta property="og:locale" content="pt_BR">
@@ -255,6 +253,14 @@ await cp('assets/antes-bouquet.webp', '_site/assets/antes-bouquet.webp');
 await cp('assets/depois-tray.webp', '_site/assets/depois-tray.webp');
 await cp('assets/fonts/Respondent-Medium.ttf', '_site/assets/fonts/Respondent-Medium.ttf');
 await cp('assets/fonts/Garet-Bold.ttf', '_site/assets/fonts/Garet-Bold.ttf');
+
+for (const [family, weights] of [['livvic', [400, 500, 600, 700]], ['montserrat', [600, 700, 800]]]) {
+  for (const weight of weights) {
+    const filename = `${family}-latin-${weight}-normal.woff2`;
+    await cp(`node_modules/@fontsource/${family}/files/${filename}`, `_site/assets/fonts/${filename}`);
+  }
+  await cp(`node_modules/@fontsource/${family}/LICENSE`, `_site/assets/fonts/${family}-LICENSE.txt`);
+}
 
 await mkdir('_site/assets/icons', { recursive: true });
 for (const name of ['arrow-right', 'arrow-up-right', 'arrow-left', 'message-circle', 'mail', 'camera', 'x', 'menu']) {

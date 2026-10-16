@@ -69,6 +69,14 @@ In the repository settings, select **GitHub Actions** as the Pages source.
 The workflow is `.github/workflows/pages.yml` and publishes only `_site/`, not
 the source PDF, intermediate JPEGs, build tools, or development dependencies.
 
+## Loading Performance
+
+Livvic and Montserrat are bundled from the Fontsource development dependencies
+and served locally as WOFF2 files with `font-display: swap`. Builds copy the font
+licenses alongside the files. No Google Fonts stylesheet is needed at runtime.
+The regular body font is preloaded, and the visible before/after photos load eagerly
+with high fetch priority. The layout and original photos remain unchanged.
+
 ## Cloudflare Web Analytics
 
 Analytics is optional and does not change the design, GitHub Pages hosting, or

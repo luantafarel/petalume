@@ -46,6 +46,40 @@ test('the landing page renders the exact layout with before-after, index, and co
   assert.ok((await sharp('_site/assets/favicon.png').metadata()).hasAlpha);
 });
 
+test('homepage LCP photos load eagerly with high priority and correct dimensions', async () => {
+  const html = await readFile('_site/index.html', 'utf8');
+  for (const name of ['antes-bouquet', 'depois-tray']) {
+    const image = html.match(new RegExp(`<img[^>]+src="assets/${name}\\.webp"[^>]*>`))?.[0];
+    assert.ok(image, name);
+    assert.ok(image.includes('loading="eager"'), name);
+    assert.ok(image.includes('fetchpriority="high"'), name);
+    assert.ok(image.includes('decoding="async"'), name);
+    const metadata = await sharp(`_site/assets/${name}.webp`).metadata();
+    assert.ok(image.includes(`width="${metadata.width}"`), name);
+    assert.ok(image.includes(`height="${metadata.height}"`), name);
+  }
+});
+
+test('all pages use self-hosted fonts without a blocking external stylesheet', async () => {
+  const filenames = (await readdir('_site')).filter((filename) => filename.endsWith('.html'));
+  for (const filename of filenames) {
+    const html = await readFile(`_site/${filename}`, 'utf8');
+    assert.ok(!html.includes('fonts.googleapis.com'), filename);
+    assert.ok(!html.includes('fonts.gstatic.com'), filename);
+    assert.ok(html.includes('<link rel="preload" href="assets/fonts/livvic-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>'), filename);
+  }
+  const css = await readFile('_site/styles.css', 'utf8');
+  for (const [family, weights] of [['livvic', [400, 500, 600, 700]], ['montserrat', [600, 700, 800]]]) {
+    for (const weight of weights) {
+      const filename = `${family}-latin-${weight}-normal.woff2`;
+      assert.ok(css.includes(`url('assets/fonts/${filename}') format('woff2')`), filename);
+      const font = await readFile(`_site/assets/fonts/${filename}`);
+      assert.equal(font.toString('ascii', 0, 4), 'wOF2', filename);
+    }
+    assert.ok((await stat(`_site/assets/fonts/${family}-LICENSE.txt`)).size > 0);
+  }
+});
+
 test('section pages render catalog pages and navigation', async () => {
   const expectedSections = [
     { slug: 'sobre-a-petalume', title: 'SOBRE A PETALUME', count: 1 },
