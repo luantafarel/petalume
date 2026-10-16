@@ -96,6 +96,10 @@ test('section pages render catalog pages and navigation', async () => {
     assert.equal((section.match(/class="catalog-page"/g) ?? []).length, sec.count);
     assert.ok(section.includes(`<title>${sec.title} | Petalume</title>`));
     assert.ok(section.includes(`<h1 id="chapter-title">${sec.title}</h1>`));
+    const firstImage = section.match(/<img src="assets\/pages\/page-\d{2}-810\.webp"[^>]*>/)?.[0];
+    assert.ok(firstImage, sec.slug);
+    assert.ok(firstImage.includes('loading="eager"'), sec.slug);
+    assert.ok(firstImage.includes('fetchpriority="high"'), sec.slug);
   }
 });
 

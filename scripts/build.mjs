@@ -147,7 +147,7 @@ ${text}
            srcset="assets/pages/page-${number}-810.webp 810w, assets/pages/page-${number}-1620.webp 1620w"
            sizes="(max-width: 810px) 100vw, 810px"
            width="810" height="1440" alt="" aria-hidden="true"
-           loading="${page.number === firstPageNumber ? 'eager' : 'lazy'}" decoding="async">
+         loading="${page.number === firstPageNumber ? 'eager' : 'lazy'}"${page.number === firstPageNumber ? ' fetchpriority="high"' : ''} decoding="async">
 ${page.number === 32 ? contactLinks : ''}
     </section>`;
 };
