@@ -18,7 +18,7 @@ for (const page of pages) {
 
 await sharp('assets/pages/page-01-1620.jpg')
   .extract({ left: 930, top: 940, width: 400, height: 580 })
-  .resize(64, 64, { fit: 'contain', background: '#f7f3e8' })
+  .resize(64, 64, { fit: 'contain', background: { r: 247, g: 243, b: 232, alpha: 0 } })
   .png()
   .toFile('assets/favicon.png');
 

@@ -20,6 +20,34 @@ test('all 32 catalog pages have responsive assets with the original proportions'
   }
 });
 
+test('catalog text reflects the updated product collection, prices, and lead time', async () => {
+  const pages = JSON.parse(await readFile('assets/catalog.json', 'utf8'));
+  assert.match(pages[11].text, /Kit Liora/);
+  assert.match(pages[12].text, /Quadro Líria M\nR\$800/);
+  assert.match(pages[13].text, /Porta Joias Origem\nR\$300/);
+  assert.match(pages[14].text, /PEÇAS MINI/);
+  assert.match(pages[15].text, /COLEÇÃO ÉDEN/);
+  assert.match(pages[16].text, /COLEÇÃO NINHO/);
+  assert.match(pages[17].text, /COLEÇÃO PET/);
+  assert.match(pages[18].text, /JOIAS AFETIVAS/);
+  assert.match(pages[19].text, /CLÁSSICOS/);
+  assert.match(pages[20].text, /PREMIUM/);
+  assert.match(pages[21].text, /Pulseira Amora/);
+  assert.match(pages[22].text, /2 meses para joias afetivas/);
+  assert.doesNotMatch(pages.map((page) => page.text).join('\n'), /Porta Anel Lume|Elo Baby|Linha Alma/);
+  const catalog = await readFile('_site/catalogo.html', 'utf8');
+  for (const [number, heading] of [
+    [15, 'Peças mini'],
+    [16, 'Coleção Éden - Mini eternizações'],
+    [17, 'Coleção Ninho - Mini eternizações'],
+    [18, 'Coleção Pet - Mini eternizações'],
+    [20, 'Clássicos folheados'],
+    [21, 'Premium emoldurados'],
+  ]) {
+    assert.ok(catalog.includes(`<h2 id="titulo-${number}">${heading}</h2>`), heading);
+  }
+});
+
 test('the landing page renders the exact layout with before-after, index, and contact', async () => {
   const html = await readFile('_site/index.html', 'utf8');
   assert.ok(html.includes('class="amanda-page-wrapper"'));
